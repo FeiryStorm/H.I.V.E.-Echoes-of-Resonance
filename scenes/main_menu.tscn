@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://dl4b3ws11ihlr"]
+
+[ext_resource type="Script" uid="uid://b16lj61gf0mh3" path="res://scripts/main_menu.gd" id="1_l6cm7"]
+[ext_resource type="Texture2D" uid="uid://dj5t4hmfuwpmt" path="res://assets/ui/background.png" id="2_bqqt6"]
+[ext_resource type="PackedScene" uid="uid://g8g8tv6hkhrw" path="res://scenes/hex_button.tscn" id="3_bqqt6"]
+
+[node name="MainMenu" type="Node2D" unique_id=2083629615]
+script = ExtResource("1_l6cm7")
+
+[node name="Background" type="Sprite2D" parent="." unique_id=370226247]
+z_index = -11
+position = Vector2(-422.00003, -663)
+scale = Vector2(1.75, 1.75)
+texture = ExtResource("2_bqqt6")
+offset = Vector2(540, 960)
+
+[node name="Buttons" type="Node" parent="." unique_id=1423456951]
+
+[node name="⬢Start⬢" parent="Buttons" unique_id=85614729 instance=ExtResource("3_bqqt6")]
+position = Vector2(540.00006, 1003)
+scale = Vector2(2.5, 2.5)
+portrait_scale = Vector2(0.23, 0.23)
+portrait_offset = Vector2(-0.85, 3.75)
+
+[node name="🐺Wolf🌿" parent="Buttons" unique_id=1638770387 instance=ExtResource("3_bqqt6")]
+z_index = 1
+position = Vector2(364.00003, 699.00006)
+scale = Vector2(2.5, 2.5)
+role = 1
+portrait_scale = Vector2(0.555, 0.525)
+portrait_offset = Vector2(-0.5, -1)
+
+[node name="🦈Shark⚡" parent="Buttons" unique_id=2055380951 instance=ExtResource("3_bqqt6")]
+position = Vector2(716, 699.00006)
+scale = Vector2(2.5, 2.5)
+role = 2
+portrait_scale = Vector2(0.555, 0.53)
+portrait_offset = Vector2(0, 0.5)
+
+[node name="🐝Bee🍯" parent="Buttons" unique_id=189421125 instance=ExtResource("3_bqqt6")]
+position = Vector2(187.99994, 1003)
+scale = Vector2(2.5, 2.5)
+role = 3
+portrait_scale = Vector2(0.53, 0.535)
+portrait_offset = Vector2(1.5, 1)
+
+[node name="🐦‍Phoenix🔥" parent="Buttons" unique_id=1155981224 instance=ExtResource("3_bqqt6")]
+position = Vector2(892, 1003.00006)
+scale = Vector2(2.5, 2.5)
+role = 4
+portrait_scale = Vector2(0.575, 0.575)
+portrait_offset = Vector2(4, 1.5)
+
+[node name="🦅Eagle🌬️" parent="Buttons" unique_id=1567225380 instance=ExtResource("3_bqqt6")]
+position = Vector2(364, 1307.0001)
+scale = Vector2(2.5, 2.5)
+role = 5
+portrait_scale = Vector2(0.605, 0.63)
+portrait_offset = Vector2(4, 14)
+
+[node name="🕷Spider🕸️" parent="Buttons" unique_id=178381925 instance=ExtResource("3_bqqt6")]
+position = Vector2(716, 1307)
+scale = Vector2(2.5, 2.5)
+role = 6
+portrait_scale = Vector2(0.545, 0.545)
+portrait_offset = Vector2(-0.5, 3)

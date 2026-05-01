@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://g8g8tv6hkhrw"]
+
+[ext_resource type="Script" uid="uid://2c14h5m0ppgp" path="res://scripts/hex_button.gd" id="1_dhwtl"]
+[ext_resource type="Texture2D" uid="uid://b1xbkwfvgjhsq" path="res://assets/ui/hive_logo.png" id="2_d2mya"]
+
+[node name="HexButton" type="Area2D" unique_id=85614729]
+script = ExtResource("1_dhwtl")
+
+[node name="HexShape" type="Polygon2D" parent="." unique_id=1038745313]
+clip_children = 2
+polygon = PackedVector2Array(69.282036, 40, 4.8984254e-15, 80, -69.282036, 40, -69.282036, -40, -1.4695276e-14, -80, 69.282036, -40)
+
+[node name="HexPortrait" type="Sprite2D" parent="HexShape" unique_id=951790580]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_d2mya")
+
+[node name="HexBorder" type="Line2D" parent="." unique_id=1429928726]
+points = PackedVector2Array(69.282036, 40, 4.8984254e-15, 80, -69.282036, 40, -69.282036, -40, -1.4695276e-14, -80, 69.282036, -40, 69.282036, 40)
+width = 2.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+
+[node name="HexCollision" type="CollisionPolygon2D" parent="." unique_id=1694706466]
+polygon = PackedVector2Array(69.282036, 40, 4.8984254e-15, 80, -69.282036, 40, -69.282036, -40, -1.4695276e-14, -80, 69.282036, -40)

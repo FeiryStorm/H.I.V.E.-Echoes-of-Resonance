@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://dfbib8utl6a75"]
+
+[ext_resource type="PackedScene" uid="uid://d16hsl25nn5o4" path="res://scenes/hex_grid.tscn" id="1_0biqy"]
+[ext_resource type="Texture2D" uid="uid://dj5t4hmfuwpmt" path="res://assets/ui/background.png" id="1_47u71"]
+[ext_resource type="Script" uid="uid://cqqgxe3eequ1" path="res://scripts/game_world.gd" id="1_ywgp6"]
+
+[node name="GameWorld" type="Node2D" unique_id=1025206854]
+script = ExtResource("1_ywgp6")
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1882893460]
+z_index = -100
+position = Vector2(-396, -660)
+scale = Vector2(1.7, 1.7)
+texture = ExtResource("1_47u71")
+offset = Vector2(540, 960)
+
+[node name="WorldCamera" type="Camera2D" parent="." unique_id=1824380213]
+
+[node name="HexGrid" parent="." unique_id=940040578 instance=ExtResource("1_0biqy")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1616520763]
+
+[node name="BeatVisualizer" type="Control" parent="CanvasLayer" unique_id=1189697509]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GuardianInfo" type="Control" parent="CanvasLayer" unique_id=1138951019]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0

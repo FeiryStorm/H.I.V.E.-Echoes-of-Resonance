@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://d16hsl25nn5o4"]
+
+[ext_resource type="Script" uid="uid://cgu4kmcacw02g" path="res://scripts/hex_grid.gd" id="2_py6sb"]
+
+[node name="HexGrid" type="Area2D" unique_id=940040578]
+position = Vector2(540, 960)
+script = ExtResource("2_py6sb")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
