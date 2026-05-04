@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GlobalSettings="*uid://dg6syk3vrq67u"
 AssetManager="*uid://jlwx0chvrb6r"
+BeatManager="*uid://djrrh4b64vcth"
 
 [display]
 

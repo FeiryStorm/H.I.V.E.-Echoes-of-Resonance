@@ -14,5 +14,45 @@ clip_children = 2
 
 [node name="HexCollision" type="CollisionPolygon2D" parent="." unique_id=808699137]
 
+[node name="EnergyLabel" type="Label" parent="." unique_id=1197010469]
+offset_right = 40.0
+offset_bottom = 23.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EnergyTop" type="Label" parent="." unique_id=266018734]
+offset_left = -20.0
+offset_top = -44.0
+offset_right = 20.0
+offset_bottom = -10.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="EnergyMid" type="Label" parent="." unique_id=564099005]
+offset_left = -20.0
+offset_top = -17.0
+offset_right = 20.0
+offset_bottom = 17.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="EnergyBot" type="Label" parent="." unique_id=1234681519]
+offset_left = -20.0
+offset_top = 10.0
+offset_right = 20.0
+offset_bottom = 44.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 3
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 2
+vertical_alignment = 1
+
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
