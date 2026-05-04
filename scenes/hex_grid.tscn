@@ -1,10 +1,14 @@
 [gd_scene format=3 uid="uid://d16hsl25nn5o4"]
 
+[ext_resource type="Script" uid="uid://c7sxwy0w2kbyd" path="res://scripts/ai_controller.gd" id="2_kkwqy"]
 [ext_resource type="Script" uid="uid://cgu4kmcacw02g" path="res://scripts/hex_grid.gd" id="2_py6sb"]
 
 [node name="HexGrid" type="Area2D" unique_id=940040578]
 position = Vector2(540, 960)
 script = ExtResource("2_py6sb")
+
+[node name="AIController" type="Node" parent="." unique_id=69191125]
+script = ExtResource("2_kkwqy")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

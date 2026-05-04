@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://d16hsl25nn5o4" path="res://scenes/hex_grid.tscn" id="1_0biqy"]
 [ext_resource type="Texture2D" uid="uid://dj5t4hmfuwpmt" path="res://assets/ui/background.png" id="1_47u71"]
 [ext_resource type="Script" uid="uid://cqqgxe3eequ1" path="res://scripts/game_world.gd" id="1_ywgp6"]
+[ext_resource type="PackedScene" uid="uid://cns6a7m5fd5bx" path="res://scenes/beat_visualizer.tscn" id="4_0vfqx"]
 
 [node name="GameWorld" type="Node2D" unique_id=1025206854]
 script = ExtResource("1_ywgp6")
@@ -23,11 +24,17 @@ offset = Vector2(540, 960)
 [node name="BeatVisualizer" type="Control" parent="CanvasLayer" unique_id=1189697509]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 42.0
+offset_bottom = 41.0
+
+[node name="BeatVisualizer" parent="CanvasLayer/BeatVisualizer" unique_id=1903770346 instance=ExtResource("4_0vfqx")]
+offset = Vector2(0, -43)
+transform = Transform2D(1, 0, 0, 1, 0, -43)
 
 [node name="GuardianInfo" type="Control" parent="CanvasLayer" unique_id=1138951019]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 258.0
+offset_top = 194.0
+offset_right = 298.0
+offset_bottom = 234.0
