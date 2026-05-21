@@ -1,26 +1,22 @@
 [gd_scene format=3 uid="uid://bf3fn7ha3g6ow"]
 
 [ext_resource type="Script" uid="uid://bt4dg5r3yuwox" path="res://scripts/hex_cell.gd" id="1_xkx2m"]
+[ext_resource type="Script" uid="uid://bf6dgevxcy2ky" path="res://scripts/cell_ui.gd" id="2_aaf5g"]
+[ext_resource type="Texture2D" uid="uid://bn10pob8kql5i" path="res://assets/ui/abilities/wolf_passive.png" id="2_t5idx"]
 
 [node name="HexCell" type="Area2D" unique_id=940040578]
 script = ExtResource("1_xkx2m")
 
-[node name="HexShape" type="Polygon2D" parent="." unique_id=849318001]
-clip_children = 2
-
-[node name="HexPortrait" type="Sprite2D" parent="HexShape" unique_id=1038864159]
-
-[node name="HexBorder" type="Line2D" parent="." unique_id=234606196]
-
-[node name="HexCollision" type="CollisionPolygon2D" parent="." unique_id=808699137]
-
-[node name="EnergyLabel" type="Label" parent="." unique_id=1197010469]
+[node name="CellUI" type="Control" parent="." unique_id=1332179723]
+layout_mode = 3
+anchors_preset = 0
 offset_right = 40.0
-offset_bottom = 23.0
-horizontal_alignment = 1
-vertical_alignment = 1
+offset_bottom = 40.0
+script = ExtResource("2_aaf5g")
 
-[node name="EnergyTop" type="Label" parent="." unique_id=266018734]
+[node name="EnergyTop" type="Label" parent="CellUI" unique_id=266018734]
+z_index = 1
+layout_mode = 0
 offset_left = -20.0
 offset_top = -44.0
 offset_right = 20.0
@@ -31,7 +27,9 @@ theme_override_font_sizes/font_size = 24
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="EnergyMid" type="Label" parent="." unique_id=564099005]
+[node name="EnergyMid" type="Label" parent="CellUI" unique_id=564099005]
+z_index = 1
+layout_mode = 0
 offset_left = -20.0
 offset_top = -17.0
 offset_right = 20.0
@@ -42,7 +40,9 @@ theme_override_font_sizes/font_size = 24
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="EnergyBot" type="Label" parent="." unique_id=1234681519]
+[node name="EnergyBot" type="Label" parent="CellUI" unique_id=1234681519]
+z_index = 1
+layout_mode = 0
 offset_left = -20.0
 offset_top = 10.0
 offset_right = 20.0
@@ -53,6 +53,17 @@ theme_override_constants/outline_size = 9
 theme_override_font_sizes/font_size = 24
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="HexShape" type="Polygon2D" parent="." unique_id=849318001]
+clip_children = 2
+
+[node name="HexPortrait" type="Sprite2D" parent="HexShape" unique_id=1038864159]
+
+[node name="HexBorder" type="Line2D" parent="." unique_id=234606196]
+texture = ExtResource("2_t5idx")
+texture_mode = 1
+
+[node name="HexCollision" type="CollisionPolygon2D" parent="." unique_id=808699137]
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

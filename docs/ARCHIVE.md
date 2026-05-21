@@ -49,3 +49,31 @@ This phase transitioned the project from static geometry into a dynamic, rhythmi
 * Triple-Tier UI: Each cell now displays the top 3 dominant resonance values in real-time, color-coded for immediate tactical assessment.
 
 ------------------------------
+
+## ⬢ H.I.V.E. Development Archive | Phase IV: The Call of the Wolf ⬢
+
+## Core Archetype & Component Milestone: Completed
+This phase breathed life into the structural grid by implementing the first complete, asymmetric Guardian ecosystem. We established a reusable plug-and-play architecture for unique guardian logic and tactical radial command interfaces while optimizing system performance for multi-platform delivery.
+
+## 1. Universal Interface & Interaction (The Radial Core)
+* **Math-Driven Radial Menu:** Engineered a dynamic, hexagonal-symmetrical radial interface using 60-degree increments to display ability buttons seamlessly around a target cell.
+* **Separation of Inputs:** Successfully uncoupled left-click targeting interactions (Drag-to-Flow) from right-click tactical micro-management (Radial Menu activation).
+* **Centralized Description Hub:** Implemented a fixed UI description label at the bottom screen bounds, allowing real-time, wrap-smart ability descriptions to dynamically overlay on hover without battlefield obstruction.
+
+## 2. Advanced Architectural Separation (The SRP Refactoring)
+* **GuardianLogic Componentization:** Outsourced specific archetype behaviors from the physical `HexCell` into standalone modular scripts (`GuardianLogic`, `WolfLogic`), enabling quick plug-and-play script instantiation upon tile capture.
+* **CellUI Encapsulation:** Isolated the cell's internal three-tier energy display logic and custom sorting routines into an independent sub-scene (`CellUI`), stripping down core cell script weight by nearly 50%.
+* **Global Action Regulation:** Replaced traditional, restrictive localized cooldown loops with a centralized round-based action limiter (`wolf_actions_this_round`) inside the `BeatManager`.
+
+## 3. High-Performance Optimization (The Dojo Formula)
+* **O(1) Grid Math:** Eradicated linear iteration loops ($O(N)$) for hover tracking by engineering a static matrix conversion system (`HexMath.pixel_to_cube`), instantly resolving screen position vectors directly to dictionary coordinates.
+* **Immediate Cascade Engine:** Restructured the delayed overflow system into an immediate recursive `while`-loop cascade within the same frame, fully armored with an automated emergency circuit brake to prevent execution freezes.
+
+## 4. Emerald Resonance Balance (The Wolf Pack)
+* **Root Network (Passive):** Implemented high-yield territorial scaling allowing a base generation spike (+6.0) combined with dynamic neighbor packaging (+0.5 per adjacent friendly node) capped tightly at +9.0 energy per beat.
+* **Thorn Wall (Active):** Developed a fortification buff targeting the `LOADING` and `PULSING` phases, instantly slicing all incoming spectral resource damage by 50% for 3 subsequent pulses.
+* **Call of the Pack (Ultimate):** Deployed a massive 3-ring cascading sonic shockwave utilizing asynchronous cube-distance timers. Spreads heavy emerald resonance layers (+33, +22, +11) outwards, followed by a distance-graded alpha glow decay to blend back into the spectrum.
+
+------------------------------
+
+⬢🌿🐺⚡🦈💧🍯🐝⬢🔥🐦‍🔥🕸️🕷️🌬️🦅🚀⬢
