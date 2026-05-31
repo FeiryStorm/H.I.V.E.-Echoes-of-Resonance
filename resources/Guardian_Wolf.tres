@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="GuardianResource" format=3 uid="uid://ckyl4tbhqv7dn"]
+
+[ext_resource type="Script" uid="uid://bd6pj3qqnbieg" path="res://scripts/guardian_resource.gd" id="1_4c74h"]
+[ext_resource type="Texture2D" uid="uid://73klw44mfoyv" path="res://assets/ui/abilities/wolf_active.png" id="1_h78xe"]
+[ext_resource type="Texture2D" uid="uid://bn10pob8kql5i" path="res://assets/ui/abilities/wolf_passive.png" id="1_umeqx"]
+[ext_resource type="Texture2D" uid="uid://b6nkywsn2p60i" path="res://assets/ui/abilities/wolf_ulti.png" id="4_u11pj"]
+
+[resource]
+script = ExtResource("1_4c74h")
+guardian_name = "Wolf"
+theme_color = Color(0.18039216, 0.8, 0.44313726, 1)
+passive_name = "Root Network"
+passive_description = "+Passive Ability | Persistent\\nDeep roots tap into the battlefield ecosystem. Generates +6.0 base resonance per pulse. Grants a Pack Bonus of +0.5 energy for every adjacent Wolf cell, capped at a maximum of +9.0 regeneration."
+passive_icon = ExtResource("1_umeqx")
+passive_icon_scale = Vector2(0.25, 0.255)
+passive_icon_offset = Vector2(0, 0.5)
+active_name = "Thorn Wall"
+active_description = "+Active Ability | Cost: 15 Energy\\nFortifies the cell perimeter with defensive vines for 3 pulses, reducing all incoming resonance damage by 50%. Max 3 deployments per round."
+active_icon = ExtResource("1_h78xe")
+active_icon_scale = Vector2(0.25, 0.24)
+ulti_name = "Call of the Pack"
+ulti_description = "+Ultimate Ability | Cost: 50 Energy\\nUnleashes a cascading 3-ring sonic shockwave. Injects +33, +22, and +11 Wolf resonance into expanding rings, forcing instant territorial conversion. Max 1 deployment per round."
+ulti_icon = ExtResource("4_u11pj")
+ulti_icon_scale = Vector2(0.19, 0.19)
+metadata/_custom_type_script = "uid://bd6pj3qqnbieg"

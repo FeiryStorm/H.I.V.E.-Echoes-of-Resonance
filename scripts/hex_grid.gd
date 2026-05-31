@@ -2,8 +2,13 @@
 ## Manager for grid generation, spectral flow, and overflow cascades.
 extends Node2D
 
-@export var hex_cell_scene: PackedScene = preload("res://scenes/hex_cell.tscn")
+# --- RESOURCES ---
 @export var map_radius := 4
+@export var hex_cell_scene: PackedScene = preload("res://scenes/hex_cell.tscn")
+
+# Central Preloads for the Universal Guardian Architecture
+@export var wolf_resource: GuardianResource = preload("res://resources/Guardian_Wolf.tres")
+@export var shark_resource: GuardianResource = preload("res://resources/Guardian_Shark.tres")
 
 # --- STATE ---
 var all_cells := {}
@@ -11,6 +16,15 @@ var selected_source: Area2D = null
 var overflow_buffer := []
 var is_dragging := false
 var drag_line: Line2D
+
+# --- UI ---
+func _on_cell_captured_or_assigned(cell, p_type):
+	match p_type:
+		HexData.Owner.WOLF:
+			cell.guardian_logic = WolfLogic.new(cell, wolf_resource)
+		HexData.Owner.SHARK:
+			cell.guardian_logic = SharkLogic.new(cell, shark_resource)
+
 
 # --- ENGINE CORES ---
 
@@ -193,18 +207,29 @@ func _process_pulse_queue() -> void:
 		t.from.set_target(null) 
 	
 
-
+	
 func _execute_transfer(p_from: Area2D, p_to: Area2D) -> void:
 	var sender_role = p_from.hex_data.current_owner
 	if sender_role == HexData.Owner.NEUTRAL: return
 	
+	# Calculate base transfer amount from global constants
 	var amount: float = p_from.hex_data.resonance[sender_role] * GlobalSettings.TRANSFER_RATE
 	
-	# DEFENSE-SYNC: Reduce damage if ThornWall is active
+	# --- SHARK PASSIVE: BLOODLUST ---
+	# If the attacker is the Shark, check if the target cell is "Weakened" (< 33% capacity)
+	if sender_role == HexData.Owner.SHARK:
+		var target_total_energy: float = p_to.hex_data.get_total_energy()
+		if target_total_energy < (GlobalSettings.MAX_RESONANCE * 0.33):
+			amount *= 1.5 # Apply 50% Throughput-Buff
+			print("⬢ Shark | Bloodlust triggered! Tearing into weakened cell with 1.5x power.")
+	
+	# --- EXISTING WOLF DEFENSE ---
+	# DEFENSE-SYNC: Reduce damage if ThornWall is active on the target cell, regardless of attacker
 	if p_to.active_buffs.has("ThornWall"):
-		amount *= 0.5 # 50% Damage Reduction
+		amount *= 0.5
 		print("⬢ Wolf | Thorns absorb resonance!")
 	
+	# Execute actual deduction and injection
 	p_from.hex_data.resonance[sender_role] -= amount
 	_inject_with_overflow(p_to, sender_role, amount)
 	
@@ -225,15 +250,11 @@ func _inject_with_overflow(p_cell: Area2D, p_role: int, p_amount: float) -> void
 ## Process all collected overflows in an immediate cascading chain reaction.
 func _process_overflow_buffer() -> void:
 	print("⬢ H.I.V.E. | Triggering immediate cascade reaction...")
-	
 	var cascade_count := 0
-	var max_cascades := 100 # Safety brake to prevent endless loops
+	var max_cascades := 8 # Reduziert von 100 auf 8! Das reicht für Wellen, verhindert aber Freezes.
 	
-	# Keep looping as long as new overflows are added to the buffer
 	while overflow_buffer.size() > 0 and cascade_count < max_cascades:
 		cascade_count += 1
-		
-		# Duplicate and clear the buffer instantly to catch new recursive overflows
 		var current_batch := overflow_buffer.duplicate()
 		overflow_buffer.clear()
 		
@@ -244,24 +265,33 @@ func _process_overflow_buffer() -> void:
 			for n_coords in neighbors:
 				var n_cell := get_cell_at(n_coords) as Area2D
 				if n_cell:
-					# Inject directly. If this cell exceeds 100, 
-					# it will append a NEW entry to the cleared overflow_buffer!
 					_inject_with_overflow(n_cell, data.role, split_amount)
 					_calculate_dominance(n_cell)
-					n_cell._update_visuals()
+					# FORCE DEFERRED: Zwingt Godot, das Zeichnen auf den nächsten Frame zu legen
+					n_cell.call_deferred("_update_visuals")
 					
 	if cascade_count >= max_cascades:
-		print("⬢ WARNING | Cascade safety brake triggered! Potential infinite loop detected.")
+		print("⬢ H.I.V.E. | Cascade safety brake active. Overflow buffered for next beat.")
 
+## Calculates ownership based on the highest spectral resonance.
 func _calculate_dominance(p_cell: Area2D) -> void:
 	var data = p_cell.hex_data
 	var highest_role = HexData.Owner.NEUTRAL
 	var max_val = 0.0
+	
 	for role in data.resonance:
 		if data.resonance[role] > max_val:
 			max_val = data.resonance[role]
 			highest_role = role
+			
+	# Threshold for ownership (at least 5 resonance to claim)
+	var old_owner = data.current_owner
 	data.current_owner = highest_role if max_val > 5.0 else HexData.Owner.NEUTRAL
+	
+	# If the owner changed, force the cell to rebuild its logic component!
+	if old_owner != data.current_owner:
+		if p_cell.has_method("_ensure_logic_exists"):
+			p_cell._ensure_logic_exists()
 
 ## ⬢ hex_grid.gd ⬢ - Wolf Mechanics
 

@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://hi7kpaiuyfwe"]
+
+[ext_resource type="Script" uid="uid://cf0avnhywglxt" path="res://scripts/radial_menu.gd" id="1_a2ygn"]
+[ext_resource type="PackedScene" uid="uid://bpi6si1sfds7d" path="res://scenes/ability_hex.tscn" id="2_ycxv0"]
+
+[node name="RadialMenu" type="Control" unique_id=1096452675]
+z_index = 43
+layout_mode = 3
+anchors_preset = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+script = ExtResource("1_a2ygn")
+
+[node name="Buttons" type="Node2D" parent="." unique_id=654903131]
+z_index = 43
+
+[node name="Center" parent="Buttons" unique_id=239629505 instance=ExtResource("2_ycxv0")]
+ability_name = "Close"
+
+[node name="North" parent="Buttons" unique_id=293168131 instance=ExtResource("2_ycxv0")]
+ability_name = ""
+ability_description = ""
+
+[node name="NorthEast" parent="Buttons" unique_id=1990068660 instance=ExtResource("2_ycxv0")]
+visible = false
+
+[node name="SouthEast" parent="Buttons" unique_id=1065809764 instance=ExtResource("2_ycxv0")]
+visible = false
+
+[node name="South" parent="Buttons" unique_id=1283820621 instance=ExtResource("2_ycxv0")]
+
+[node name="SouthWest" parent="Buttons" unique_id=1347640650 instance=ExtResource("2_ycxv0")]
+visible = false
+
+[node name="NorthWest" parent="Buttons" unique_id=1026059585 instance=ExtResource("2_ycxv0")]
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=64213437]
+
+[node name="DescriptionLabel" type="Label" parent="." unique_id=836463944]
+modulate = Color(0, 0, 0, 1)
+z_index = 44
+layout_mode = 0
+offset_left = -107.0
+offset_right = -67.0
+offset_bottom = 58.0
+theme_override_font_sizes/font_size = 42

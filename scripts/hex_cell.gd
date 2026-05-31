@@ -56,27 +56,33 @@ func _show_radial_menu() -> void:
 	if hex_data.current_owner != GlobalSettings.selected_animal:
 		return
 		
-	# Check if a menu is already open to avoid duplicates
+	# 1. Clear existing duplicate menus safely
 	var existing_menu = get_tree().current_scene.get_node_or_null("RadialMenu")
-	if existing_menu: existing_menu.queue_free()
+	if existing_menu: 
+		existing_menu.queue_free()
 		
-	var menu_scene = preload("res://scenes/radial_menu.tscn")
-	var menu = menu_scene.instantiate()
+	# 2. Instantiate the menu scene
+	var menu_scene := preload("res://scenes/radial_menu.tscn")
+	var menu := menu_scene.instantiate()
 	menu.name = "RadialMenu"
 	
-	# Add to GameWorld (current_scene) instead of the cell
+	# 3. Add directly to the GameWorld scene tree
 	get_tree().current_scene.add_child(menu)
 	
-	# Align to the cell's screen position
+	# 4. Snap the menu to the global position of this specific cell
 	menu.global_position = global_position
 	
-	# WICHTIG: Die Verbindung muss VOR dem open() passieren
+	# 5. Connect the interaction signals
 	if not menu.action_selected.is_connected(_on_radial_menu_action):
 		menu.action_selected.connect(_on_radial_menu_action)
-		print("⬢ Cell | Signal connected to Menu.") # DEBUG PRINT
+		print("⬢ Cell | Signal connected to Menu.")
 	
-	menu.setup_for_guardian(hex_data.current_owner)
+	# 🏛️ THE FIX: This exact line must be executed, matching the new function signature!
+	menu.setup_for_guardian_node(self)
+	
+	# 6. Unleash the bloom animation
 	menu.open()
+
 
 func _on_radial_menu_action(p_action: String) -> void:
 	print("⬢ Cell | Processing: ", p_action)
@@ -102,20 +108,32 @@ func _on_radial_menu_action(p_action: String) -> void:
 	# Force visual update to show the brown border
 	_update_visuals()
 
-## Helper to ensure logic component exists
+
+## Automatically instantiates the correct logic brain based on current owner.
 func _ensure_logic_exists() -> void:
-	var role = hex_data.current_owner
+	if not hex_data: return
+	
+	var role := hex_data.current_owner
 	if role == HexData.Owner.NEUTRAL:
 		guardian_logic = null
 		return
 		
-	# SRP: Re-assign logic if it's missing but we have an owner
+	var grid := get_parent()
+	if not grid: return
+	
+	# Fetch the resource directly from the central HexGrid exports
 	match role:
 		HexData.Owner.WOLF:
-			guardian_logic = WolfLogic.new(self)
-		# Future-Proof: SHARK, BEE etc. will go here
+			if grid.get("wolf_resource") != null:
+				guardian_logic = WolfLogic.new(self, grid.wolf_resource)
+				print("⬢ Cell | WolfLogic successfully initialized at ", hex_data.cube_coords)
+		HexData.Owner.SHARK:
+			if grid.get("shark_resource") != null:
+				guardian_logic = SharkLogic.new(self, grid.shark_resource)
+				print("⬢ Cell | SharkLogic successfully initialized at ", hex_data.cube_coords)
 		_:
 			guardian_logic = null
+
 
 
 # --- INITIALIZATION ---
@@ -124,6 +142,8 @@ func _ensure_logic_exists() -> void:
 func setup(p_data: HexData) -> void:
 	hex_data = p_data
 	_update_geometry()
+	# FORCE: Ensure the logic component is built right during birth!
+	_ensure_logic_exists()
 	_update_visuals()
 
 # --- DRAWING ---

@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dj5t4hmfuwpmt" path="res://assets/ui/background.png" id="1_47u71"]
 [ext_resource type="Script" uid="uid://cqqgxe3eequ1" path="res://scripts/game_world.gd" id="1_ywgp6"]
 [ext_resource type="PackedScene" uid="uid://cns6a7m5fd5bx" path="res://scenes/beat_visualizer.tscn" id="4_0vfqx"]
+[ext_resource type="PackedScene" uid="uid://bpi6si1sfds7d" path="res://scenes/ability_hex.tscn" id="5_wbbl4"]
 
 [node name="GameWorld" type="Node2D" unique_id=1025206854]
 script = ExtResource("1_ywgp6")
@@ -38,3 +39,26 @@ offset_left = 258.0
 offset_top = 194.0
 offset_right = 298.0
 offset_bottom = 234.0
+
+[node name="PassiveDisplay" parent="CanvasLayer/GuardianInfo" unique_id=239629505 instance=ExtResource("5_wbbl4")]
+z_index = 1
+position = Vector2(-162, 1170)
+icon_scale = Vector2(0.2, 0.2)
+
+[node name="AbilityDescriptionLabel" type="Label" parent="CanvasLayer/GuardianInfo" unique_id=1802022743]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.3000002
+anchor_top = 34.550003
+anchor_right = -2.3000002
+anchor_bottom = 34.550003
+offset_left = -125.99999
+offset_top = -119.00012
+offset_right = 889.0
+offset_bottom = 271.99988
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/line_spacing = 5
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 42
+autowrap_mode = 3

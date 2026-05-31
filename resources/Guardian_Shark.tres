@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="GuardianResource" format=3 uid="uid://c8tppperf076h"]
+
+[ext_resource type="Script" uid="uid://bd6pj3qqnbieg" path="res://scripts/guardian_resource.gd" id="1_xvsc2"]
+[ext_resource type="Texture2D" uid="uid://dywefaxp1i733" path="res://assets/ui/abilities/shark_active.jpeg" id="1_yixhh"]
+[ext_resource type="Texture2D" uid="uid://croui07qf13uh" path="res://assets/ui/abilities/shark_passive.jpeg" id="2_qypa2"]
+[ext_resource type="Texture2D" uid="uid://drp7wi375sm4v" path="res://assets/ui/abilities/shark_ulti.jpeg" id="4_jpikn"]
+
+[resource]
+script = ExtResource("1_xvsc2")
+guardian_name = "Shark"
+theme_color = Color(0.20392157, 0.59607846, 0.85882354, 1)
+passive_name = "Bloodlust"
+passive_description = "Faster transfer rate to weakened cells."
+passive_icon = ExtResource("2_qypa2")
+active_name = "Maelstrom"
+active_description = "The Shark cell gains the total net energy (Drained sum minus distributed buffs)"
+active_icon = ExtResource("1_yixhh")
+active_cost = 20.0
+ulti_name = "Tsunami"
+ulti_description = " Fast, directional blue wave particle effect"
+ulti_icon = ExtResource("4_jpikn")
+metadata/_custom_type_script = "uid://bd6pj3qqnbieg"
