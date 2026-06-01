@@ -4,55 +4,54 @@ extends GuardianLogic
 class_name WolfLogic
 
 func apply_passive() -> void:
-	var regen: float = 6.0 
+	# Base regeneration from resource
+	var regen: float = res.base_regeneration + 3.0 # 3.0 Base + 3.0 Wolf-Bonus = 6.0
 	var grid = cell.get_parent()
 	var neighbors = grid.get_neighbors(cell.hex_data.cube_coords)
 	
 	for n_coords in neighbors:
 		var n_cell = grid.get_cell_at(n_coords)
 		if n_cell and n_cell.hex_data.current_owner == HexData.Owner.WOLF:
-			regen += 0.5
+			regen += 0.5 # Pack bonus calculated locally in code
 	
 	cell.hex_data.add_resonance(HexData.Owner.WOLF, min(regen, 9.0))
 	cell._update_visuals()
 
 func activate_ability() -> bool:
-	if BeatManager.current_phase == BeatManager.GamePhase.ECHOING:
-		print("⬢ Wolf | Ability rejected: Too late for defense!")
-		return false
-		
-	if BeatManager.wolf_actions_this_round >= 3:
-		print("⬢ Wolf | Ability rejected: Round limit reached!")
-		return false
+	if BeatManager.current_phase == BeatManager.GamePhase.ECHOING: return false
+	#print("⬢ Wolf | Ability rejected: Too late for defense!")
+	# Uses max limit from resource
+	if BeatManager.wolf_actions_this_round >= res.active_max_uses_per_round: return false
 
 	var wolf_res = cell.hex_data.resonance[HexData.Owner.WOLF]
-	if wolf_res >= 15.0:
-		cell.hex_data.resonance[HexData.Owner.WOLF] -= 15.0
-		cell.active_buffs["ThornWall"] = 3
-		BeatManager.wolf_actions_this_round += 1
+	
+	# Uses cost from resource!
+	if wolf_res >= res.active_cost:
+		cell.hex_data.resonance[HexData.Owner.WOLF] -= res.active_cost
+		
+		# Uses duration from resource!
+		cell.active_buffs["ThornWall"] = res.active_duration_pulses
+		
+		BeatManager.wolf_actions_this_round += 1 #print("⬢ Wolf | Ability rejected: Round limit reached!")
 		cell._update_visuals()
 		return true
 	return false
 
-
-## --- THE ULTIMATE CALL ---
 func activate_ultimate() -> bool:
-	if BeatManager.current_phase == BeatManager.GamePhase.ECHOING:
-		print("⬢ Wolf | Ultimate rejected: Too late!")
-		return false
-		
-	if BeatManager.wolf_ultimate_used_this_round:
-		print("⬢ Wolf | Ultimate rejected: Already unleashed this round!")
-		return false
-
+	if BeatManager.current_phase == BeatManager.GamePhase.ECHOING: return false
+# 		print("⬢ Wolf | Ultimate rejected: Too late!")
+	if BeatManager.wolf_ultimate_used_this_round: return false
+#		print("⬢ Wolf | Ultimate rejected: Already unleashed this round!")
 	var wolf_res: float = cell.hex_data.resonance[HexData.Owner.WOLF]
-	if wolf_res >= 50.0:
-		cell.hex_data.resonance[HexData.Owner.WOLF] -= 50.0
+	
+	# Uses ulti cost from resource!
+	if wolf_res >= res.ulti_cost:
+		cell.hex_data.resonance[HexData.Owner.WOLF] -= res.ulti_cost
 		BeatManager.wolf_ultimate_used_this_round = true
-		
 		_emit_three_ring_shockwave()
 		return true
 	return false
+
 
 ## Emits the cascading 3-ring shockwave across the battlefield
 func _emit_three_ring_shockwave() -> void:

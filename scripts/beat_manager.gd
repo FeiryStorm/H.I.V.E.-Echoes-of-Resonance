@@ -10,10 +10,10 @@ signal pulse_impact()
 enum GamePhase { LOADING, PULSING, ECHOING }
 
 # --- SETTINGS ---
-@export var pulse_duration: float = 5.0
+@export var pulse_duration: float = 10.0
 @export var phase_distribution := {
-	GamePhase.LOADING: 0.7,  # 70% of time for planning
-	GamePhase.PULSING: 0.1,  # 10% for the energy wave
+	GamePhase.LOADING: 0.5,  # 50% of time for planning
+	GamePhase.PULSING: 0.3,  # 30% for the energy wave
 	GamePhase.ECHOING: 0.2   # 20% for chain reactions
 }
 
@@ -21,6 +21,8 @@ enum GamePhase { LOADING, PULSING, ECHOING }
 var current_phase: GamePhase = GamePhase.LOADING
 var time_left: float = 0.0
 var is_active: bool = false
+var wolf_actions_this_round := 0
+var wolf_ultimate_used_this_round := false
 
 # --- ENGINE CORES ---
 
@@ -46,6 +48,9 @@ func start_heartbeat() -> void:
 
 ## Switches to the next logical phase in the cycle
 func _advance_phase() -> void:
+	if current_phase == GamePhase.ECHOING:
+		wolf_actions_this_round = 0 # RESET at start of new round
+		wolf_ultimate_used_this_round = false # RESET ULTIMATE at start of new round
 	match current_phase:
 		GamePhase.LOADING: _set_phase(GamePhase.PULSING)
 		GamePhase.PULSING: 

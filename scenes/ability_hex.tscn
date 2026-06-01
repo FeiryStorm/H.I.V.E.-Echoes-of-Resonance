@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://bpi6si1sfds7d"]
+
+[ext_resource type="Script" uid="uid://dyl3sapfncskr" path="res://scripts/ability_hex.gd" id="1_rloxx"]
+
+[node name="AbilityHex" type="Area2D" unique_id=239629505]
+script = ExtResource("1_rloxx")
+radius = 60.0
+icon_scale = Vector2(0.17, 0.17)
+icon_offset = Vector2(-0.5, 3)
+
+[node name="HexShape" type="Polygon2D" parent="." unique_id=448174655]
+clip_children = 2
+polygon = PackedVector2Array(51.961525, 30, 3.673819e-15, 60, -51.961525, 30, -51.961525, -30, -1.1021457e-14, -60, 51.961525, -30)
+
+[node name="Icon" type="Sprite2D" parent="HexShape" unique_id=1755427187]
+
+[node name="HexBorder" type="Line2D" parent="." unique_id=674126845]
+points = PackedVector2Array(51.961525, 30, 3.673819e-15, 60, -51.961525, 30, -51.961525, -30, -1.1021457e-14, -60, 51.961525, -30, 51.961525, 30)
+width = 3.0
+
+[node name="HexCollision" type="CollisionPolygon2D" parent="." unique_id=1881966985]
+polygon = PackedVector2Array(51.961525, 30, 3.673819e-15, 60, -51.961525, 30, -51.961525, -30, -1.1021457e-14, -60, 51.961525, -30)
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
