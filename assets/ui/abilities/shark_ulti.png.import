@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://croui07qf13uh"
-path="res://.godot/imported/shark_passive.jpeg-7d725d0e2d1a6923235817d2a7d8163e.ctex"
+uid="uid://cm1vgmi2j5gsx"
+path="res://.godot/imported/shark_ulti.png-eb48075be43ab2bd87d4b36936c02c46.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/abilities/shark_passive.jpeg"
-dest_files=["res://.godot/imported/shark_passive.jpeg-7d725d0e2d1a6923235817d2a7d8163e.ctex"]
+source_file="res://assets/ui/abilities/shark_ulti.png"
+dest_files=["res://.godot/imported/shark_ulti.png-eb48075be43ab2bd87d4b36936c02c46.ctex"]
 
 [params]
 

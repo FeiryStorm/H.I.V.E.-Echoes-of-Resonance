@@ -1,6 +1,8 @@
 ## ⬢ radial_menu.gd ⬢
-## Universal radial menu for guardian abilities.
+## Universal radial menu displaying, arranging, and dispatching guardian ability requests.
+## Completely decoupled from physical cells, binding directly to raw GuardianResources.
 extends Control
+class_name RadialMenu
 
 signal action_selected(p_action: String)
 
@@ -11,166 +13,139 @@ signal action_selected(p_action: String)
 var current_active_name: String = ""
 var current_ulti_name: String = ""
 
-# --- ENGINE CORES ---
+# --- PUBLIC INTERACTION API ---
 
-func _ready() -> void:
-	pass
-
-# --- LOGIC ---
-
+## Triggers the entry bloom scale animation of the radial wheel.
 func open() -> void:
-	pivot_offset = size / 2
+	pivot_offset = size / 2.0
 	scale = Vector2.ZERO
 	show()
+	
 	var tw := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tw.tween_property(self, "scale", Vector2.ONE, 0.3)
 
-## Arranges buttons in a hexagonal ring using your proven layout.
-## Arranges buttons in a hexagonal ring using your proven layout.
-func _arrange_buttons() -> void:
-	var buttons_container := get_node_or_null("Buttons")
-	if not buttons_container: 
-		print("⬢ ERROR | Buttons container node not found!")
+## Closes the radial ring with a smooth collapse animation and frees resources.
+func close() -> void:
+	var tw := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	tw.tween_property(self, "scale", Vector2.ZERO, 0.2)
+	await tw.finished
+	queue_free()
+
+## Configures layout, labels, and icons dynamically from the passed configuration resource.
+func setup_with_resource(p_resource: GuardianResource) -> void:
+	if not p_resource:
+		push_error("⬢ Menu | Failed to setup: Provided GuardianResource is null!")
 		return
+		
+	print("⬢ Menu | Initializing tactical interfaces for: ", p_resource.guardian_name)
 	
-	var buttons := buttons_container.get_children()
-	print("⬢ Menu | Found ", buttons.size(), " buttons to arrange. Radius is: ", button_radius)
+	current_active_name = p_resource.active_name
+	current_ulti_name = p_resource.ulti_name
+	
+	var north: Area2D = get_node_or_null("Buttons/North") as Area2D
+	var south: Area2D = get_node_or_null("Buttons/South") as Area2D
+	var center: Area2D = get_node_or_null("Buttons/Center") as Area2D
+	
+	if north:
+		north.set("ability_name", p_resource.active_name)
+		# 🌀 DYNAMIC: Fetches the dynamically formatted description string
+		north.set("ability_description", p_resource.get_formatted_active_description())
+		north.set("icon_texture", p_resource.active_icon)
+		north.set("radius", p_resource.active_icon_radius)
+		north.set("icon_scale", p_resource.active_icon_scale)
+		north.set("icon_offset", p_resource.active_icon_offset)
+		
+	if south:
+		south.set("ability_name", p_resource.ulti_name)
+		# 🌀 DYNAMIC: Fetches the dynamically formatted description string
+		south.set("ability_description", p_resource.get_formatted_ulti_description())
+		south.set("icon_texture", p_resource.ulti_icon)
+		south.set("radius", p_resource.ulti_icon_radius)
+		south.set("icon_scale", p_resource.ulti_icon_scale)
+		south.set("icon_offset", p_resource.ulti_icon_offset)
+		
+	if center:
+		center.set("ability_name", "Close")
+		center.set("ability_description", "Cancel active interaction.")
+		center.set("icon_texture", load("res://assets/ui/hive_logo.png") as Texture2D)
+		center.set("radius", 60.0)
+		center.set("icon_scale", Vector2(0.17, 0.17))
+		center.set("icon_offset", Vector2(-0.5, 3.0))
+
+	_wire_buttons_and_hover()
+	_arrange_buttons()
+
+# --- INTERNAL MATHEMATICAL LAYOUTS ---
+
+## Arranges button child nodes geometrically in a circular layout.
+func _arrange_buttons() -> void:
+	var buttons_container: Node = get_node_or_null("Buttons")
+	if not buttons_container: 
+		push_error("⬢ Menu | Buttons container node not found in scene tree!")
+		return
+		
+	var buttons: Array[Node] = buttons_container.get_children()
 	
 	for i in range(buttons.size()):
-		var btn = buttons[i]
+		var btn := buttons[i] as Area2D
+		if not btn: continue
 		
 		if btn.name == "Center":
 			btn.position = Vector2.ZERO
-			print("⬢ Menu | Positioned Center at (0,0)")
 			continue
-		
-		# Your proven 60 degree increments
-		var angle := deg_to_rad((i-1) * 60 - 60) 
+			
+		# Step positions smoothly along 60-degree radial steps
+		var angle: float = deg_to_rad((i - 1) * 60.0 - 60.0) 
 		var target_pos := Vector2(cos(angle), sin(angle)) * button_radius
 		
-		# FORCE assignment
 		btn.position = target_pos
-		
-		# ABSOLUTE DEBUG PRINT: Tell us where it went
-		print("⬢ Menu | Moving Node [", btn.name, "] to local position: ", target_pos)
-		
-		# Double check if textures are arriving
-		if btn.get("icon_texture") == null:
-			print("⬢ WARNING | Node [", btn.name, "] has NO icon_texture loaded!")
 
-
-## Configures icons and names dynamically from the resource.
-func setup_for_guardian_node(p_cell: Area2D) -> void:
-	print("⬢⬢⬢ STEP 1: RadialMenu received the command! Checking cell validity...")
+## Connects button press and hover feedback listeners dynamically.
+func _wire_buttons_and_hover() -> void:
+	var buttons_container: Node = get_node_or_null("Buttons")
+	if not buttons_container: return
 	
-	if not is_instance_valid(p_cell):
-		print("⬢⬢⬢ FAIL A: p_cell is NOT a valid instance!")
-		return
+	for child in buttons_container.get_children():
+		var btn := child as Area2D
+		if not btn: continue
 		
-	print("⬢⬢⬢ STEP 2: Cell is valid. Checking guardian_logic on cell...")
-	if p_cell.guardian_logic == null:
-		print("⬢⬢⬢ FAIL B: guardian_logic on this cell is NULL!")
-		return
-		
-	print("⬢⬢⬢ STEP 3: guardian_logic exists. Checking resource (.tres)...")
-	if p_cell.guardian_logic.res == null:
-		print("⬢⬢⬢ FAIL C: GuardianResource (.tres) is MISSING inside the logic component!")
-		return
-		
-	print("⬢⬢⬢ SUCCESS: All checks passed! Loading resource data for: ", p_cell.guardian_logic.res.guardian_name)
-	
-	# --- AB HIER LÄUFT DEIN BESTEHENDER CODE UNVERÄNDERT ---
-	var r: GuardianResource = p_cell.guardian_logic.res
-	current_active_name = r.active_name
-	current_ulti_name = r.ulti_name
-	
-	# ... (der Rest der Zuweisungen für North, South, Center und am Ende _arrange_buttons())
-
-	
-	var north = get_node_or_null("Buttons/North")
-	var south = get_node_or_null("Buttons/South")
-	var center = get_node_or_null("Buttons/Center")
-	
-	if north:
-		north.ability_name = r.active_name
-		north.ability_description = r.active_description
-		north.icon_texture = r.active_icon
-		north.radius = r.active_radius
-		north.icon_scale = r.active_icon_scale
-		north.icon_offset = r.active_icon_offset
-		
-	if south:
-		south.ability_name = r.ulti_name
-		south.ability_description = r.ulti_description
-		south.icon_texture = r.ulti_icon
-		south.radius = r.ulti_radius
-		south.icon_scale = r.ulti_icon_scale
-		south.icon_offset = r.ulti_icon_offset
-		
-	if center:
-		center.ability_name = "Close"
-		center.ability_description = "Cancel selection."
-		center.icon_texture = load("res://assets/ui/hive_logo.png")
-		center.radius = 60.0
-		center.icon_scale = Vector2(0.17, 0.17)
-		center.icon_offset = Vector2(-0.5, 3.0)
-
-	# Dynamically connect signals safely without duplicates
-	var buttons_container = get_node_or_null("Buttons")
-	if buttons_container:
-		for child in buttons_container.get_children():
-			if child.has_signal("ability_pressed"):
-				if child.ability_pressed.is_connected(_on_ability_selected):
-					child.ability_pressed.disconnect(_on_ability_selected)
-				child.ability_pressed.connect(_on_ability_selected)
-				
-	# Now arrange everything onto their proper circles!
-	## ⬢ radial_menu.gd ⬢ - Hover Signal Recovery
-
-	# Connect all dynamic hex-buttons safely and inject Hover-Logic
-	for child in $Buttons.get_children():
-		if child.has_signal("ability_pressed"):
-			# Click connection
-			if not child.ability_pressed.is_connected(_on_ability_selected):
-				child.ability_pressed.connect(_on_ability_selected)
+		if btn.has_signal("ability_pressed"):
+			# Safe click connection cleanup
+			if btn.ability_pressed.is_connected(_on_ability_selected):
+				btn.ability_pressed.disconnect(_on_ability_selected)
+			btn.ability_pressed.connect(_on_ability_selected)
 			
-			# HOVER RECOVERY: Bind mouse signals to the central UI label
-			if not child.mouse_entered.is_connected(func(): _on_button_hover_start(child)):
-				child.mouse_entered.connect(func(): _on_button_hover_start(child))
-			if not child.mouse_exited.is_connected(_on_button_hover_end):
-				child.mouse_exited.connect(_on_button_hover_end)
+			# Hover feedback connection recovery
+			if btn.mouse_entered.is_connected(_on_button_hover_start.bind(btn)):
+				btn.mouse_entered.disconnect(_on_button_hover_start.bind(btn))
+			btn.mouse_entered.connect(_on_button_hover_start.bind(btn))
 			
-	_arrange_buttons()
+			if btn.mouse_exited.is_connected(_on_button_hover_end):
+				btn.mouse_exited.disconnect(_on_button_hover_end)
+			btn.mouse_exited.connect(_on_button_hover_end)
 
-## Pushes the description text directly to your central GameWorld canvas label
+# --- SIGNALS & HOVER CORES ---
+
 func _on_button_hover_start(p_btn: Area2D) -> void:
-	var central_label = get_tree().current_scene.get_node_or_null("CanvasLayer/GuardianInfo/AbilityDescriptionLabel")
+	var central_label := get_tree().current_scene.get_node_or_null("CanvasLayer/GuardianInfo/AbilityDescriptionLabel") as Label
 	if central_label and p_btn.get("ability_name") != null:
-		central_label.text = p_btn.ability_name + "\n" + p_btn.ability_description
+		central_label.text = str(p_btn.get("ability_name")) + "\n" + str(p_btn.get("ability_description"))
 
 func _on_button_hover_end() -> void:
-	var central_label = get_tree().current_scene.get_node_or_null("CanvasLayer/GuardianInfo/AbilityDescriptionLabel")
+	var central_label := get_tree().current_scene.get_node_or_null("CanvasLayer/GuardianInfo/AbilityDescriptionLabel") as Label
 	if central_label:
 		central_label.text = ""
 
-
 func _on_ability_selected(p_name: String) -> void:
-	var internal_cmd := ""
+	var internal_cmd: String = ""
 	
-	# Universal dynamic command mapping
 	if p_name == current_active_name: 
 		internal_cmd = "Active"
 	elif p_name == current_ulti_name: 
 		internal_cmd = "Ultimate"
 	elif p_name == "Close": 
 		internal_cmd = "Cancel"
-	
-	print("⬢ Menu | Sending Command: ", internal_cmd, " : ", p_name)
+		
+	print("⬢ Menu | Sending Command: ", internal_cmd, " -> ", p_name)
 	action_selected.emit(internal_cmd)
 	close()
-
-func close() -> void:
-	var tw := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
-	tw.tween_property(self, "scale", Vector2.ZERO, 0.2)
-	await tw.finished
-	queue_free()

@@ -28,7 +28,9 @@ visible = false
 [node name="SouthEast" parent="Buttons" unique_id=1065809764 instance=ExtResource("2_ycxv0")]
 visible = false
 
-[node name="South" parent="Buttons" unique_id=1283820621 instance=ExtResource("2_ycxv0")]
+[node name="South" parent="Buttons" unique_id=1591115021 instance=ExtResource("2_ycxv0")]
+ability_name = ""
+ability_description = ""
 
 [node name="SouthWest" parent="Buttons" unique_id=1347640650 instance=ExtResource("2_ycxv0")]
 visible = false
@@ -39,6 +41,7 @@ visible = false
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=64213437]
 
 [node name="DescriptionLabel" type="Label" parent="." unique_id=836463944]
+visible = false
 modulate = Color(0, 0, 0, 1)
 z_index = 44
 layout_mode = 0

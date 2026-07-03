@@ -1,68 +1,85 @@
 ## ⬢ ai_controller.gd ⬢
-## Rival logic adapted for spectral resonance spectrums.
+## Tactical agent controller orchestrating moves for rival spectrums.
+## Connects directly to the EventBus to plan actions during the LOADING phase.
 extends Node
+class_name AIController
 
-@onready var grid: Node2D = get_parent()
-@export var max_actions_per_beat := 5 # The AI's "Hand-Speed" limit
+# --- NODES ---
+@onready var grid: HexGrid = get_parent() as HexGrid
+
+# --- CONFIGURATION ---
+@export var max_actions_per_beat: int = 5
 
 # --- ENGINE CORES ---
 
 func _ready() -> void:
-	if BeatManager:
-		BeatManager.phase_changed.connect(_on_phase_changed)
+	# Decouple clock monitoring straight to EventBus signals
+	EventBus.phase_changed.connect(_on_phase_changed)
 
-# --- SIGNAL HANDLING ---
+# --- EVENT BUS LISTENERS ---
 
 func _on_phase_changed(p_new_phase: int) -> void:
-	if p_new_phase == BeatManager.GamePhase.LOADING:
-		# Artificial thinking delay
+	if p_new_phase == int(BeatManager.GamePhase.LOADING):
+		# Create an artificial human-like thinking delay before planning moves
 		await get_tree().create_timer(0.5).timeout
 		_think()
 
+# --- AI CORE DECISION BRAIN ---
 
-
+## Analyzes the battlefield layout, filters relevant nodes, and issues move commands.
 func _think() -> void:
 	if not grid: return
 	
-	var possible_actions := []
+	var possible_actions: Array[Area2D] = []
 	
-	# 1. Collect all potential moves
-	for coords in grid.all_cells:
-		var cell: Area2D = grid.all_cells[coords]
+	# 1. Gather all potential cells owned by rival factions
+	for coords: Vector3i in grid.all_cells:
+		var cell: Area2D = grid.all_cells[coords] as Area2D
+		if not cell: continue
+		
 		var role: int = cell.hex_data.current_owner
 		
-		# Rival check
-		if role != GlobalSettings.selected_animal and role != HexData.Owner.NEUTRAL:
-			# Only consider cells with enough power to actually make an impact
+		# Rival checks: Filter out neutrals and the player's selected guardian
+		if role != GlobalSettings.selected_animal and role != int(HexData.Owner.NEUTRAL):
+			# Tactical limit: Only act if the cell has enough resonance capital
 			if cell.hex_data.resonance[role] > 20.0:
 				possible_actions.append(cell)
 	
-	# 2. Sort by energy (AI wants to move its strongest cells first)
-	possible_actions.sort_custom(func(a, b): 
-		return a.hex_data.resonance[a.hex_data.current_owner] > b.hex_data.resonance[b.hex_data.current_owner]
+	# 2. Sort available cells by dominance (Rivals want to spread from their power centers first)
+	possible_actions.sort_custom(func(a: Area2D, b: Area2D) -> bool:
+		var owner_a: int = a.hex_data.current_owner
+		var owner_b: int = b.hex_data.current_owner
+		return a.hex_data.resonance[owner_a] > b.hex_data.resonance[owner_b]
 	)
 	
-	# 3. Limit the number of actions
-	var actions_taken := 0
-	for ai_cell in possible_actions:
+	# 3. Issue commands limited by the hand-speed balancing threshold
+	var actions_taken: int = 0
+	for ai_cell: Area2D in possible_actions:
 		if actions_taken >= max_actions_per_beat:
 			break
 			
 		if _ai_decide_action(ai_cell):
 			actions_taken += 1
 
-## Decisions for a single cell. Returns true if a target was set.
+## Evaluates the local surroundings of a cell and plans flow target coordinates.
 func _ai_decide_action(p_cell: Area2D) -> bool:
 	var my_role: int = p_cell.hex_data.current_owner
 	var neighbors: Array[Vector3i] = grid.get_neighbors(p_cell.hex_data.cube_coords)
+	
+	# Randomize neighbor search vectors to make spreading patterns organic
 	neighbors.shuffle()
 	
-	for n_coords in neighbors:
-		var target: Area2D = grid.get_cell_at(n_coords)
+	for n_coords: Vector3i in neighbors:
+		var target: Area2D = grid.get_cell_at(n_coords) as Area2D
 		if target:
-			# Only attack if the target isn't already dominated by me
+			# Target check: Only spread energy to nodes not currently owned by this specific rival
 			if target.hex_data.current_owner != my_role:
 				p_cell.set_target(target)
-				return true # Succesfully planned an action
 				
-	return false # No valid target found
+				# FUTURE EXTENSION HOOK: 
+				# This is the exact place where rival tactical logic (e.g. casting abilities)
+				# can be executed once guardian expansion phases go live!
+				
+				return true # Successfully planned a transfer
+				
+	return false # No viable neighboring vector target found

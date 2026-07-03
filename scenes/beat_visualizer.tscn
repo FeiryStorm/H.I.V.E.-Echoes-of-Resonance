@@ -1,3 +1,4 @@
+; STREAMING_CHUNK: Initializing the Rhythmic HUD...
 [gd_scene format=3 uid="uid://cns6a7m5fd5bx"]
 
 [ext_resource type="Script" uid="uid://covginj3ooe60" path="res://scripts/beat_visualizer.gd" id="1_f2f4e"]
@@ -13,21 +14,23 @@ offset_right = 85.0
 offset_bottom = 103.0
 script = ExtResource("1_f2f4e")
 
+; STREAMING_CHUNK: Defining UI labels and progression bars...
 [node name="PhaseLabel" type="Label" parent="Control" unique_id=462422659]
 layout_mode = 0
 offset_left = 429.0
 offset_top = 348.0
 offset_right = 691.0
 offset_bottom = 371.0
+text = "PHASE: LOADING"
 
 [node name="ProgressBar" type="ProgressBar" parent="Control" unique_id=466760523]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 7.3750005
-anchor_top = 7.1500006
-anchor_right = 7.3750005
-anchor_bottom = 7.1500006
-offset_left = 15.9999695
-offset_top = 101.99997
-offset_right = 382.99997
-offset_bottom = 144.99997
+anchor_left = 7.375
+anchor_top = 7.15
+anchor_right = 7.375
+anchor_bottom = 7.15
+offset_left = 16.0
+offset_top = 102.0
+offset_right = 383.0
+offset_bottom = 145.0

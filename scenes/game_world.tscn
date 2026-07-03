@@ -16,49 +16,45 @@ scale = Vector2(1.7, 1.7)
 texture = ExtResource("1_47u71")
 offset = Vector2(540, 960)
 
-[node name="WorldCamera" type="Camera2D" parent="." unique_id=1824380213]
+[node name="WorldCamera" type="Camera2D" parent="." unique_id=112233]
 
-[node name="HexGrid" parent="." unique_id=940040578 instance=ExtResource("1_0biqy")]
+[node name="HexGrid" parent="." unique_id=2066087015 instance=ExtResource("1_0biqy")]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1616520763]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=826453203]
 
-[node name="BeatVisualizer" type="Control" parent="CanvasLayer" unique_id=1189697509]
+[node name="BeatVisualizer" parent="CanvasLayer" unique_id=309688051 instance=ExtResource("4_0vfqx")]
+
+[node name="GuardianInfo" type="Control" parent="CanvasLayer" unique_id=419397149]
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 3
-anchors_preset = 0
-offset_right = 42.0
-offset_bottom = 41.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = 1625.0
+offset_right = 2.0
+offset_bottom = 289.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="BeatVisualizer" parent="CanvasLayer/BeatVisualizer" unique_id=1903770346 instance=ExtResource("4_0vfqx")]
-offset = Vector2(0, -43)
-transform = Transform2D(1, 0, 0, 1, 0, -43)
-
-[node name="GuardianInfo" type="Control" parent="CanvasLayer" unique_id=1138951019]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 258.0
-offset_top = 194.0
-offset_right = 298.0
-offset_bottom = 234.0
-
-[node name="PassiveDisplay" parent="CanvasLayer/GuardianInfo" unique_id=239629505 instance=ExtResource("5_wbbl4")]
-z_index = 1
-position = Vector2(-162, 1170)
-icon_scale = Vector2(0.2, 0.2)
-
-[node name="AbilityDescriptionLabel" type="Label" parent="CanvasLayer/GuardianInfo" unique_id=1802022743]
+[node name="AbilityDescriptionLabel" type="Label" parent="CanvasLayer/GuardianInfo" unique_id=596327682]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.3000002
-anchor_top = 34.550003
-anchor_right = -2.3000002
-anchor_bottom = 34.550003
-offset_left = -125.99999
-offset_top = -119.00012
-offset_right = 889.0
-offset_bottom = 271.99988
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/line_spacing = 5
-theme_override_constants/outline_size = 12
-theme_override_font_sizes/font_size = 42
+anchor_left = 0.5
+anchor_top = 0.53900003
+anchor_right = 0.5
+anchor_bottom = 0.53900003
+offset_left = -547.0
+offset_top = -432.77606
+offset_right = 529.0
+offset_bottom = -14.776062
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
 autowrap_mode = 3
+
+[node name="PassiveDisplay" parent="CanvasLayer/GuardianInfo" unique_id=1877496085 instance=ExtResource("5_wbbl4")]
+z_index = 99
+position = Vector2(148, -223)

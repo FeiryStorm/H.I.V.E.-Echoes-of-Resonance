@@ -1,22 +1,29 @@
 [gd_resource type="Resource" script_class="GuardianResource" format=3 uid="uid://c8tppperf076h"]
 
 [ext_resource type="Script" uid="uid://bd6pj3qqnbieg" path="res://scripts/guardian_resource.gd" id="1_xvsc2"]
-[ext_resource type="Texture2D" uid="uid://dywefaxp1i733" path="res://assets/ui/abilities/shark_active.jpeg" id="1_yixhh"]
-[ext_resource type="Texture2D" uid="uid://croui07qf13uh" path="res://assets/ui/abilities/shark_passive.jpeg" id="2_qypa2"]
-[ext_resource type="Texture2D" uid="uid://drp7wi375sm4v" path="res://assets/ui/abilities/shark_ulti.jpeg" id="4_jpikn"]
+[ext_resource type="Texture2D" uid="uid://cd0mavdcylxdo" path="res://assets/ui/abilities/shark_active.png" id="1_yixhh"]
+[ext_resource type="Texture2D" uid="uid://cm1vgmi2j5gsx" path="res://assets/ui/abilities/shark_ulti.png" id="2_n57jo"]
+[ext_resource type="Texture2D" uid="uid://dsi6xcemy4ljp" path="res://assets/ui/abilities/shark_passive.png" id="2_qypa2"]
 
 [resource]
 script = ExtResource("1_xvsc2")
 guardian_name = "Shark"
 theme_color = Color(0.20392157, 0.59607846, 0.85882354, 1)
+base_regeneration = 5.0
 passive_name = "Bloodlust"
-passive_description = "Faster transfer rate to weakened cells."
+passive_description = "Passive Ability | Frenzy
+Senses systemic vulnerability across the network. Outbound resonance transfer to weakened target cells (total energy below 33%) is intensified by a 1.5x throughput modifier."
 passive_icon = ExtResource("2_qypa2")
 active_name = "Maelstrom"
-active_description = "The Shark cell gains the total net energy (Drained sum minus distributed buffs)"
+active_description = "Active Ability | Cost: {cost} Energy
+Unleashes a localized vortex siphoning up to 7.0 resonance from adjacent non-allied cells. Generates a dynamic pack-buff for nearby allies and retains the surplus energy. Max {uses} deployments per round."
 active_icon = ExtResource("1_yixhh")
 active_cost = 20.0
+active_duration_pulses = 0
 ulti_name = "Tsunami"
-ulti_description = " Fast, directional blue wave particle effect"
-ulti_icon = ExtResource("4_jpikn")
+ulti_description = "Ultimate Ability | Cost: {cost} Energy
+Summons an organic directional fanning Tsunami wave (spreading fanned patterns up to {range} steps depth). Siphons and damages rivals (dealing {base_damage} up to {range}x{step_damage} damage) and reclaims {drain}% as active Shark resonance. Floods neutrals by claiming {claim}%, and surges allies by boosting them with {boost}% energy."
+ulti_icon = ExtResource("2_n57jo")
+ulti_gameplay_range = 8.0
+ulti_base_damage = 14.0
 metadata/_custom_type_script = "uid://bd6pj3qqnbieg"
