@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="GuardianResource" format=3 uid="uid://ckyl4tbhqv7dn"]
+
+[ext_resource type="Script" uid="uid://bd6pj3qqnbieg" path="res://scripts/guardian_resource.gd" id="1_4c74h"]
+[ext_resource type="Texture2D" uid="uid://73klw44mfoyv" path="res://assets/ui/abilities/wolf_active.png" id="1_h78xe"]
+[ext_resource type="Texture2D" uid="uid://bn10pob8kql5i" path="res://assets/ui/abilities/wolf_passive.png" id="1_umeqx"]
+[ext_resource type="Texture2D" uid="uid://b6nkywsn2p60i" path="res://assets/ui/abilities/wolf_ulti.png" id="4_u11pj"]
+
+[resource]
+script = ExtResource("1_4c74h")
+guardian_name = "Wolf"
+theme_color = Color(0.18039216, 0.8, 0.44313726, 1)
+base_regeneration = 6.0
+passive_name = "Root Network"
+passive_description = "Passive Ability | Persistent
+Deep roots tap into the battlefield ecosystem. Generates +{regen} base resonance per pulse. Grants a Pack Bonus of +{pack_bonus} energy for every adjacent Wolf cell, capped at a maximum of +{cap} regeneration."
+passive_icon = ExtResource("1_umeqx")
+passive_icon_scale = Vector2(0.25, 0.255)
+passive_icon_offset = Vector2(0, 0.5)
+active_name = "Thorn Wall"
+active_description = "Active Ability | Cost: {cost} Energy
+Fortifies the cell perimeter with defensive vines for {duration} pulses, reducing all incoming resonance damage by {reduction}%. Max {uses} deployments per round."
+active_icon = ExtResource("1_h78xe")
+active_icon_scale = Vector2(0.25, 0.24)
+ulti_name = "Call of the Pack"
+ulti_description = "Ultimate Ability | Cost: {cost} Energy
+Unleashes a cascading {rings}-ring sonic shockwave. Injects +{r1}, +{r2}, and +{r3} Wolf resonance into expanding rings, forcing instant territorial conversion. Max {uses} deployment per round."
+ulti_icon = ExtResource("4_u11pj")
+ulti_gameplay_range = 3.0
+ulti_icon_scale = Vector2(0.19, 0.19)
+ulti_base_damage = 33.0
+ulti_step_damage_scale = 11.0
+ulti_drain_efficiency = 0.0
+ulti_friendly_boost_scale = 0.0
+ulti_neutral_claim_efficiency = 0.0
+metadata/_custom_type_script = "uid://bd6pj3qqnbieg"
